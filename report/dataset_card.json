@@ -1,0 +1,32 @@
+{
+  "note": "Core task data. The official SignalScope dataset was not yet released when this was built; the pipeline is manifest-driven and the official set plugs in via model/data/prepare.py::adapt_signalscope. Nothing from the organisers' held-out set is ever used.",
+  "sources": [
+    {
+      "name": "CIFAKE",
+      "role": "CIFAKE-style core set: real CIFAR-10 photos vs Stable Diffusion 1.4 images (32x32). 20k/20k train, 1k/1k val, 10k/10k test",
+      "size": "42,000 train/val + 20,000 test images used (of 120,000)",
+      "license": "MIT (dataset); CIFAR-10 images under their original terms",
+      "url": "https://huggingface.co/datasets/dragonintelligence/CIFAKE-image-dataset",
+      "citation": "Bird, J.J. & Lotfi, A. (2024). CIFAKE: Image Classification and Explainable Identification of AI-Generated Synthetic Images. IEEE Access."
+    },
+    {
+      "name": "Tiny-GenImage (subset of GenImage)",
+      "role": "High-resolution real ImageNet photos + fakes from 8 generators (ADM, BigGAN, GLIDE, Midjourney, SD1.4, SD1.5, VQDM, Wukong). Midjourney and VQDM are HELD OUT as unseen generators; the rest train the detector and the attribution head",
+      "size": "shards downloaded as listed in report/metrics.json (config.n_train)",
+      "license": "CC BY-NC-SA 4.0",
+      "url": "https://huggingface.co/datasets/TheKernel01/Tiny-GenImage",
+      "citation": "Zhu, M. et al. (2023). GenImage: A Million-Scale Benchmark for Detecting AI-Generated Image. NeurIPS Datasets and Benchmarks."
+    },
+    {
+      "name": "Imagenette (320px)",
+      "role": "Additional REAL photographs (10 ImageNet classes) to balance real vs fake at high resolution; val split -> local test reals",
+      "size": "9,469 train + 3,925 val images",
+      "license": "Apache 2.0 (loader/curation); ImageNet images under ImageNet terms (research use)",
+      "url": "https://github.com/fastai/imagenette",
+      "citation": "Howard, J. (2019). Imagenette. fast.ai."
+    }
+  ],
+  "ethics": "No datasets of identifiable individuals were sourced; GenImage/Imagenette are ImageNet-derived object/scene photos, CIFAKE is CIFAR-10-derived. The system makes no claims about real people or events.",
+  "preprocessing": "High-resolution sources are resized to short side 256 and re-encoded as JPEG q95 for BOTH classes so that file format and resolution cannot act as shortcuts. CIFAKE is stored as PNG at native 32x32 and upsampled to 224 at train/inference time.",
+  "split_policy": "Held-out generators -> test (protocol=unseen) only. Other GenImage/Imagenette images -> 70% train / 10% val / 20% test at random (reals 30% test). Val is used for model selection, temperature scaling and the cue reference ranges; test is touched once for reporting."
+}
