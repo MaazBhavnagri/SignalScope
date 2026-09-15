@@ -27,7 +27,7 @@ Follow these simple steps to install and run the project locally.
 
 ### Step 1: Open your terminal and clone the repository
 ```bash
-git clone <your-github-repo-link> SignalScope
+git clone https://github.com/MaazBhavnagri/SignalScope.git
 cd SignalScope
 ```
 
@@ -78,6 +78,14 @@ If you want to use the graphical interface:
    uvicorn app.backend.main:app --port 8000
    ```
 3. Open your browser and go to: **http://localhost:8000**
+
+### Step 6: One-Command Deployment via Docker (Alternative)
+If you prefer to run the entire application (frontend + backend) in a containerized environment without installing Python or Node.js, you can use our included Docker setup:
+```bash
+docker build -t signalscope .
+docker run -p 8000:8000 signalscope
+```
+Then, open your browser and go to: **http://localhost:8000**
 
 ---
 
