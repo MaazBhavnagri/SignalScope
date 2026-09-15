@@ -1,4 +1,13 @@
-# SignalScope — Telling Real From Synthetic
+<div align="center">
+  <img src="assets/banner.png" alt="SignalScope Banner" width="600" height="400" />
+
+  # SignalScope — Telling Real From Synthetic
+  
+  [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://python.org)
+  [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)](https://reactjs.org)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+  [![CVPR 2025](https://img.shields.io/badge/Engine-CVPR_2025_FSD-ff69b4)](https://github.com/ductai199x/Forensic-Self-Descriptions-CVPR25)
+</div>
 
 > A media-forensics tool that decides whether an image is **real or AI-generated**. It reports honest metrics on a held-out split that includes **generators never seen in training**, and explains each verdict with a **Grad-CAM evidence map and measurable forensic cues** — presented as a likelihood, never an accusation.
 
@@ -18,6 +27,21 @@ SIH 2026 internal hackathon · Problem Statement 2 · L. J. Institute of Enginee
 | **E** | Image–caption consistency (OpenCLIP ViT-B/32) | Completed | `model/multimodal.py` |
 | **F** | Deployable UI: drag-and-drop scan, batch scan, case files with filters, HTML/JSON evidence reports | Completed | `app/frontend`, `app/backend` |
 | **G** | Active-defence analysis: FGSM/PGD white-box attacks + JPEG/TTA mitigations, honest failure table | Completed | `model/attacks.py` |
+
+---
+
+## 📸 Showcase & UI Features
+
+<div align="center">
+  <h3>1. Batch Scanning & Forensic Dashboard</h3>
+  <img src="assets/ui_dashboard.png" alt="Web UI Dashboard" width="300" height="210" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <p><em>Drag and drop multiple images at once. SignalScope processes them concurrently and stores results in a persistent SQLite database.</em></p>
+  <br/>
+  
+  <h3>2. CVPR 2025 FSD Verdict Gauge</h3>
+  <img src="assets/ui_verdict.png" alt="FSD Verdict Gauge" width="300" height="210" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <p><em>Highly calibrated gauge using the bleeding-edge Forensic Self-Descriptions (FSD) engine to detect zero-shot synthetic signatures.</em></p>
+</div>
 
 ---
 
@@ -127,6 +151,20 @@ We tested the model on a strict held-out test split of 6,800 images. **Midjourne
 ### Architecture Overview
 SignalScope uses a **Dual-Stream** architecture. The primary stream is an EfficientNet-B0 backbone for semantic features. The secondary stream passes the image through Spatial Rich Model (SRM) high-pass filters to explicitly expose frequency-domain anomalies (like upsampling artifacts) before passing them through a CNN. The two streams are fused to produce the final real/AI likelihood and a 7-way generator attribution.
 
+#### 🆕 Next-Gen Integration: FSD + LLM
+In addition to the core architecture, we have integrated the **CVPR 2025 Forensic Self-Descriptions (FSD)** zero-shot engine as our primary deployment pipeline for the web app, paired with an **OpenRouter VLM** that provides visual reasoning and an autonomous verdict-override layer if it disagrees with the statistical scores.
+
+```mermaid
+graph TD
+    A[Upload Image] --> B[CVPR 2025 FSD Engine]
+    A --> C[Metadata Parser EXIF/C2PA]
+    B --> D{Zero-Shot Verdict & Attribution}
+    C --> D
+    D --> E[OpenRouter VLM Visual Inspection]
+    A --> E
+    E --> F[Final Verdict & Plain English Explanation]
+```
+
 ### Calibration Approach
 We use **Temperature Scaling** fitted on the validation set. Instead of reporting a raw logit, we report a calibrated likelihood. We established a strict decision threshold of 0.0515 to target a 5% False Positive Rate on validation reals. The app surfaces an explicit "inconclusive" band around this threshold rather than forcing a binary answer when the model is unsure.
 
@@ -154,5 +192,6 @@ We have generated all the required reports and metrics for the judges. Here is e
 
 ## 7. Demo Video
 
-[Click here to watch the full 3-minute Video Demonstration](https://youtube.com/) 
-*(Replace this link with your actual video link before submission!)*
+[![SignalScope Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://youtube.com/)
+
+*(Replace `YOUR_VIDEO_ID` in the image URL and the `https://youtube.com/` link with your actual YouTube video link before submission!)*
