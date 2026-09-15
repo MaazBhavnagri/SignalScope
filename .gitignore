@@ -1,5 +1,5 @@
 # data & weights (large; see README for download links)
-data/
+/data/
 weights/*.pt
 weights/*.pth
 weights/*.onnx
