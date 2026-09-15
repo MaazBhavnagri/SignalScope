@@ -23,6 +23,9 @@ from model.data.datasets import ManifestDataset, add_noise, eval_transform, gaus
 from model.nets import load_checkpoint
 from model.predict import load_calibration
 
+def _screenshot_jpeg50(im):
+    return jpeg_recompress(screenshot(im, 0.7, 85), 50)
+
 DEGRADATIONS = {
     "original": None,
     "jpeg_q90": partial(jpeg_recompress, quality=90),
@@ -35,7 +38,7 @@ DEGRADATIONS = {
     "blur_s2": partial(gaussian_blur, sigma=2.0),
     "noise_5": partial(add_noise, std=5.0),
     "screenshot": partial(screenshot, scale=0.8, quality=80),
-    "screenshot_jpeg50": lambda im: jpeg_recompress(screenshot(im, 0.7, 85), 50),
+    "screenshot_jpeg50": _screenshot_jpeg50,
 }
 LIVE_SET = ["jpeg_q75", "jpeg_q30", "resize_0.5x", "blur_s1", "screenshot", "noise_5"]
 PRETTY = {
@@ -66,14 +69,14 @@ def study(checkpoint=C.DEFAULT_CHECKPOINT, n_per_group: int = 500, workers: int 
     rng = np.random.default_rng(seed)
     test = load_manifest(split="test")
     reals = [r for r in test if r["label"] == 0 and r["source"] != "cifake"]
-    seen = [r for r in test if r["label"] == 1 and r.get("protocol") == "seen"]
-    unseen = [r for r in test if r["label"] == 1 and r.get("protocol") == "unseen"]
+    seen = [r for r in test if r["label"] == 1 and r["generator"] not in C.HELD_OUT_GENERATORS]
+    unseen = [r for r in test if r["label"] == 1 and r["generator"] in C.HELD_OUT_GENERATORS]
     pick = lambda rows, n: [rows[i] for i in rng.permutation(len(rows))[:n]]  # noqa: E731
     reals, seen, unseen = pick(reals, n_per_group), pick(seen, n_per_group), pick(unseen, n_per_group)
     rows = reals + seen + unseen
     y = np.array([r["label"] for r in rows])
-    is_seen = np.array([r.get("protocol") == "seen" or r["label"] == 0 for r in rows])
-    is_unseen = np.array([r.get("protocol") == "unseen" or r["label"] == 0 for r in rows])
+    is_seen = np.array([r["generator"] not in C.HELD_OUT_GENERATORS or r["label"] == 0 for r in rows])
+    is_unseen = np.array([r["generator"] in C.HELD_OUT_GENERATORS or r["label"] == 0 for r in rows])
     results = {}
     base = None
     for name, fn in DEGRADATIONS.items():

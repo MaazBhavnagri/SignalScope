@@ -1,0 +1,73 @@
+{
+  "n_fake": 50,
+  "n_real": 50,
+  "threshold": 0.0515,
+  "temperature": 1.0075363573992504,
+  "detection_rate": {
+    "none": {
+      "epsilon": 0,
+      "steps": 0,
+      "plain": 0.7200000286102295,
+      "jpeg75": 0.8199999928474426,
+      "tta": 0.7599999904632568,
+      "jpeg75+tta": 0.8600000143051147,
+      "mean_p_ai": 0.32225191593170166
+    },
+    "fgsm_1/255": {
+      "epsilon": 0.00392156862745098,
+      "steps": 1,
+      "plain": 0.03999999910593033,
+      "jpeg75": 0.5400000214576721,
+      "tta": 0.20000000298023224,
+      "jpeg75+tta": 0.6000000238418579,
+      "mean_p_ai": 0.020715363323688507
+    },
+    "fgsm_2/255": {
+      "epsilon": 0.00784313725490196,
+      "steps": 1,
+      "plain": 0.30000001192092896,
+      "jpeg75": 0.23999999463558197,
+      "tta": 0.41999998688697815,
+      "jpeg75+tta": 0.2800000011920929,
+      "mean_p_ai": 0.1038341224193573
+    },
+    "pgd_1/255": {
+      "epsilon": 0.00392156862745098,
+      "steps": 5,
+      "plain": 0.0,
+      "jpeg75": 0.6600000262260437,
+      "tta": 0.019999999552965164,
+      "jpeg75+tta": 0.7799999713897705,
+      "mean_p_ai": 0.001948832767084241
+    },
+    "pgd_2/255": {
+      "epsilon": 0.00784313725490196,
+      "steps": 5,
+      "plain": 0.0,
+      "jpeg75": 0.5400000214576721,
+      "tta": 0.019999999552965164,
+      "jpeg75+tta": 0.5799999833106995,
+      "mean_p_ai": 0.0023474018089473248
+    },
+    "pgd_4/255": {
+      "epsilon": 0.01568627450980392,
+      "steps": 5,
+      "plain": 0.0,
+      "jpeg75": 0.18000000715255737,
+      "tta": 0.18000000715255737,
+      "jpeg75+tta": 0.2800000011920929,
+      "mean_p_ai": 0.006332805380225182
+    }
+  },
+  "fpr_on_reals": {
+    "plain": 0.4000000059604645,
+    "jpeg75": 0.6399999856948853,
+    "tta": 0.3799999952316284,
+    "jpeg75+tta": 0.6800000071525574
+  },
+  "notes": [
+    "White-box attacks assume the attacker has the model weights - a worst case.",
+    "Detection rate = share of AI-generated images still flagged after the attack.",
+    "JPEG pre-filtering and TTA are cheap inference-time mitigations; their cost is measured as FPR on real images."
+  ]
+}

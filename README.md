@@ -1,181 +1,150 @@
 # SignalScope — Telling Real From Synthetic
 
-> Media-forensics tool that decides whether an image is **real or AI-generated**, reports honest metrics on a held-out
-> split that includes **generators never seen in training**, and explains each verdict with a **Grad-CAM evidence map
-> and measurable forensic cues** — presented as a likelihood, never an accusation.
+> A media-forensics tool that decides whether an image is **real or AI-generated**. It reports honest metrics on a held-out split that includes **generators never seen in training**, and explains each verdict with a **Grad-CAM evidence map and measurable forensic cues** — presented as a likelihood, never an accusation.
 
 SIH 2026 internal hackathon · Problem Statement 2 · L. J. Institute of Engineering and Technology
 
 ---
 
-## 1. What was built
+## 1. What Was Built (Core + Bonus Modules)
 
-| | Module | Status | Where |
+| | Module | Status | Where to find it |
 |---|---|---|---|
-| **Core** | Real vs AI-generated classification, calibrated confidence, ROC-AUC / macro-F1 / confusion matrix on a held-out set with an unseen-generator split, predict interface (CLI + API + UI) | ✅ | `model/`, `app/` |
-| **A** | Faithful explanation: Grad-CAM heat-map of the AI logit, 3×3 localisation, 9 measurable cues compared against real-photo reference ranges, templated hedged text | ✅ headline | `model/explain.py`, `model/cues.py` |
-| **B** | Generator attribution (7-way head; family-level roll-up: GAN / pixel-diffusion / latent-diffusion / VQ-diffusion) | ✅ | `model/nets.py`, `model/evaluate.py` |
-| **C** | Robustness to degradation: JPEG q30–90, down-scaling, blur, noise, screenshot; offline study + per-image live stress test | ✅ | `model/robustness.py` |
-| **D** | Provenance & metadata: EXIF, XMP/PNG text, generator markers, C2PA manifest presence, explicit fusion rule | ✅ | `model/provenance.py` |
-| **E** | Image–caption consistency (OpenCLIP ViT-B/32) | ✅ | `model/multimodal.py` |
-| **F** | Deployable UI: drag-and-drop scan, batch scan (≤50), case files with filters, side-by-side compare, HTML/JSON evidence reports, reviewer decisions | ✅ | `app/frontend`, `app/backend` |
-| **G** | Active-defence analysis: FGSM/PGD white-box attacks + JPEG/TTA mitigations, honest failure table | ✅ | `model/attacks.py` |
+| **Core** | Real vs AI-generated classification, calibrated confidence, ROC-AUC / macro-F1 / confusion matrix on a held-out set with an unseen-generator split, predict interface | Completed | `model/`, `app/` |
+| **A** | Faithful explanation: Grad-CAM heat-map, 3×3 localisation, 9 measurable cues compared against real-photo reference ranges | Completed | `model/explain.py`, `model/cues.py` |
+| **B** | Generator attribution (7-way head; family-level roll-up: GAN / pixel-diffusion / latent-diffusion / VQ-diffusion) | Completed | `model/nets.py`, `model/evaluate.py` |
+| **C** | Robustness to degradation: JPEG q30–90, down-scaling, blur, noise, screenshot; offline study + per-image live stress test | Completed | `model/robustness.py` |
+| **D** | Provenance & metadata: EXIF, XMP/PNG text, generator markers, C2PA manifest presence, explicit fusion rule | Completed | `model/provenance.py` |
+| **E** | Image–caption consistency (OpenCLIP ViT-B/32) | Completed | `model/multimodal.py` |
+| **F** | Deployable UI: drag-and-drop scan, batch scan, case files with filters, HTML/JSON evidence reports | Completed | `app/frontend`, `app/backend` |
+| **G** | Active-defence analysis: FGSM/PGD white-box attacks + JPEG/TTA mitigations, honest failure table | Completed | `model/attacks.py` |
 
-Everything listed is implemented and exercised by `pytest` (23 tests) and the demo.
+---
 
-## 2. Quick start (judge path, < 10 minutes)
+## 2. Setup and Run Instructions (Under 10 Minutes)
 
-Prerequisites: Python 3.10–3.12, Node 18+, (optional) NVIDIA GPU.
+Follow these simple steps to install and run the project locally.
 
+### Step 1: Open your terminal and clone the repository
 ```bash
-git clone <this repo> SignalScope && cd SignalScope
-# Windows
-.\scripts\setup.ps1
-.\scripts\run.ps1
-# Linux / macOS
-bash scripts/setup.sh
-bash scripts/run.sh
+git clone <your-github-repo-link> SignalScope
+cd SignalScope
 ```
 
-Then open **http://localhost:8000**. The setup script installs PyTorch (CUDA if `nvidia-smi` is present, else CPU),
-Python and Node dependencies, builds the frontend and fetches the released weights into `weights/`
-(`python scripts/get_weights.py`; see `weights/README.md`).
-
-Predict on a single new image from the command line (the required *predict interface*):
-
+### Step 2: Set up a Python Virtual Environment
+We highly recommend using a virtual environment to keep dependencies clean.
 ```bash
-python -m model.predict path/to/image.jpg --heatmap out.png --json out.json
+# Create the virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows (Git Bash or Command Prompt):
+venv\Scripts\activate
+# On Linux or macOS:
+source venv/bin/activate
 ```
 
-Batch-predict a folder (one CSV row per image: `filename, p_ai_generated, label, threshold`) — this is the entry
-point organisers can run on their held-out set:
+### Step 3: Install Dependencies
+```bash
+# Install PyTorch (CPU version is fine for inference)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
+# Install the rest of the requirements
+pip install -r requirements.txt
+```
+
+### Step 4: Run the Predict Interface (CLI)
+You can test the model on a single image instantly:
+```bash
+python -m model.predict path/to/your/image.jpg --heatmap out.png --json out.json
+```
+
+Or you can batch-predict a whole folder (this generates a CSV output):
 ```bash
 python -m model.predict --dir path/to/folder --csv predictions.csv
 ```
 
-Run the tests: `python -m pytest tests -q` (no weights or network required — tests build a tiny checkpoint).
+### Step 5: Run the Web App (UI)
+If you want to use the graphical interface:
+1. First, build the frontend:
+   ```bash
+   cd app/frontend
+   npm install
+   npm run build
+   cd ../..
+   ```
+2. Start the backend server:
+   ```bash
+   uvicorn app.backend.main:app --port 8000
+   ```
+3. Open your browser and go to: **http://localhost:8000**
 
-Docker (CPU): `docker build -t signalscope . && docker run -p 8000:8000 signalscope`.
+---
 
-### Manual setup
+## 3. Datasets Used
 
-```bash
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121   # or /cpu
-pip install -r requirements.txt
-cd app/frontend && npm install && npm run build && cd ../..
-python scripts/get_weights.py            # or train (section 4)
-uvicorn app.backend.main:app --port 8000
-```
+The official SignalScope dataset had not been released when this was built, so we trained on public data. The pipeline is **manifest-driven** so the official set drops in without code changes.
 
-Dev mode with hot reload: `scripts/run.ps1 -Dev` / `bash scripts/run.sh --dev` (API on 8010, Vite on 5173).
+| Dataset | Use | Source |
+|---|---|---|
+| **CIFAKE** | "CIFAKE-style" core set; real = CIFAR-10, fake = Stable Diffusion 1.4 | HF: `dragonintelligence/CIFAKE-image-dataset` |
+| **Tiny-GenImage** | High-res real ImageNet photos + fakes from ADM, BigGAN, GLIDE, Midjourney, SD1.4, SD1.5, VQDM, Wukong | HF: `TheKernel01/Tiny-GenImage` |
+| **Imagenette** | Additional real photographs to balance real/fake data | fast.ai |
 
-## 3. Datasets & licences
+No images of identifiable individuals were sourced.
 
-The official SignalScope dataset had not been released when this was built, so the pipeline trains on public data
-and is **manifest-driven** so the official set drops in without code changes elsewhere
-(`model/data/prepare.py::adapt_signalscope`, expects `data/raw/signalscope/{train,val,test}/{real,fake}/`).
+---
 
-| Dataset | Use | Size used | Licence / source |
-|---|---|---|---|
-| **CIFAKE** (HF mirror `dragonintelligence/CIFAKE-image-dataset`) | "CIFAKE-style" core set; real = CIFAR-10, fake = Stable Diffusion 1.4, 32 px | 20k+20k train, 1k+1k val, 10k+10k test | MIT · Bird & Lotfi 2024 |
-| **Tiny-GenImage** (`TheKernel01/Tiny-GenImage`, subset of GenImage) | high-res real ImageNet photos + fakes from ADM, BigGAN, GLIDE, Midjourney, SD1.4, SD1.5, VQDM, Wukong | see `report/metrics.json → config.n_train` | CC BY-NC-SA 4.0 · Zhu et al. 2023 |
-| **Imagenette** 320 px (fast.ai) | additional real photographs (same ImageNet domain) to balance real/fake | 9,469 train, 3,925 val | Apache 2.0 |
+## 4. Reported Metrics
 
-No images of identifiable individuals were sourced. Full card: `report/dataset_card.json`.
+We tested the model on a strict held-out test split of 6,800 images. **Midjourney** and **VQDM** were held out entirely during training to test zero-shot generalization.
 
-**Unseen-generator protocol.** `Midjourney` and `VQDM` are *held out entirely* — never used for training,
-validation, calibration or cue-reference fitting. They form the local **unseen split**. The other six generators are
-"seen". The organisers' held-out set is never touched; our reported core metric is what `python -m model.evaluate`
-computes on our own test split, and the organisers compute theirs via the predict interface above.
+- **Overall ROC-AUC**: 0.8096
+- **Unseen-Generator-Split AUC**:
+  - Midjourney: 0.8414
+  - VQDM: 0.7777
+- **Macro-F1**: 0.7267
+- **Accuracy**: 0.7387 (at strict threshold of 0.0515)
+- **False Positive Rate**: 0.3568
+- **Confusion Matrix**:
+  - True Negatives (Real correctly identified): 1801
+  - False Positives (Real misclassified as AI): 999
+  - False Negatives (AI misclassified as Real): 778
+  - True Positives (AI correctly identified): 3222
 
-**Shortcut removal.** All high-res images (both classes) are stored at short side 256 as JPEG q95, so file format and
-resolution — which differ per generator in raw GenImage — cannot be learned instead of forensics.
+---
 
-## 4. Reproduce training (≈1 h on an RTX 3050 6 GB)
+## 5. Architecture, Calibration, and Limitations
 
-```bash
-python -m model.data.download            # CIFAKE + Tiny-GenImage shards from Hugging Face
-#   Imagenette: download https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-320.tgz and extract to data/raw/imagenette/
-python -m model.data.prepare             # -> data/processed + data/manifest.csv
-python -m model.train --epochs 8         # -> weights/signalscope_best.pt (best val AUC)
-python -m model.calibrate                # temperature scaling + FPR-targeted threshold -> weights/calibration.json
-python -m model.cues fit                 # real-photo reference ranges for the cue ledger
-python -m model.evaluate                 # -> report/metrics.json  (AUC overall/seen/unseen, F1, confusion, per generator)
-python -m model.robustness               # -> report/robustness.json
-python -m model.attacks                  # -> report/attacks.json
-```
+### Architecture Overview
+SignalScope uses a **Dual-Stream** architecture. The primary stream is an EfficientNet-B0 backbone for semantic features. The secondary stream passes the image through Spatial Rich Model (SRM) high-pass filters to explicitly expose frequency-domain anomalies (like upsampling artifacts) before passing them through a CNN. The two streams are fused to produce the final real/AI likelihood and a 7-way generator attribution.
 
-## 5. Results (local held-out test split)
+### Calibration Approach
+We use **Temperature Scaling** fitted on the validation set. Instead of reporting a raw logit, we report a calibrated likelihood. We established a strict decision threshold of 0.0515 to target a 5% False Positive Rate on validation reals. The app surfaces an explicit "inconclusive" band around this threshold rather than forcing a binary answer when the model is unsure.
 
-<!-- METRICS:BEGIN -->
-_Fill in by running `python -m model.evaluate`; see `report/model_report.md`._
-<!-- METRICS:END -->
+### Known Limitations
+1. Extreme image degradation (e.g., WhatsApp downscaling to 0.25x or heavy blur) destroys the high-frequency cues our model relies on, which can cause the verdict to shift towards "real".
+2. Adversarial attacks (like PGD) can manipulate the SRM stream. While our test-time augmentation helps, the model remains vulnerable to targeted white-box perturbations.
+3. Metadata markers (like C2PA) are detected but not cryptographically verified, meaning they could theoretically be spoofed.
 
-Per-generator AUC, degradation curves, adversarial results, calibration and training history are shown live in the
-app's **Model card** view and stored under `report/`.
+---
 
-## 6. Architecture
+## 6. Where to Find Our Reports and Files (Quick Guide)
 
-```
-image (+caption, +bytes) ─► preprocessing (whole-image 224², hflip TTA)
-        ├─► RGB stream: EfficientNet-B0 (ImageNet-pretrained, timm)            ─┐
-        └─► residual stream: 3 fixed SRM high-pass filters → 4-block CNN        ─┴► fusion(256) ─► real/AI logit
-                                                                                              └► generator logits (7)
-logit ─► temperature scaling ─► calibrated P(AI) ─► band {likely real · possibly real · inconclusive · possibly AI · likely AI}
-        ├─► Grad-CAM on the RGB stream's last conv (AI logit) → heat-map, 3×3 mass, peak bbox
-        ├─► 9 measurable cues vs real-photo 5–95th percentile reference  → "fired" cues
-        ├─► EXIF / XMP / PNG-text / C2PA scan → provenance signal → explicit fusion rule
-        └─► OpenCLIP caption agreement (optional)
-                     ─► templated, hedged explanation citing only cues that fired
-```
+We have generated all the required reports and metrics for the judges. Here is exactly where you can find them in this repository:
 
-* **Why a residual stream?** Generator fingerprints live in high-frequency noise, which transfers across generator
-  families better than semantics — this is the generalisation bet for the unseen split.
-* **Trained for the wild.** Random JPEG (q30–95), rescaling, blur, noise, screenshot simulation, colour jitter,
-  random-resized crops. Real/fake and per-source balanced sampling.
-* **Calibration & operating point.** Temperature fitted on validation; threshold chosen for a 5% validation
-  false-positive rate (flagging a real photo is the costly error). An explicit *inconclusive* band around the threshold
-  is surfaced in the UI instead of a forced answer.
-* **Faithfulness guard-rails.** Text is assembled only from cues whose measured value is outside the real-photo range,
-  localisation statements come from the heat-map mass distribution, and wording strength is tied to the calibrated
-  probability. No free-form LLM text.
-* **Provenance fusion.** An explicit generator marker raises the combined likelihood to ≥0.90; camera EXIF can
-  corroborate but never lowers the visual likelihood (it is trivially copied); missing metadata is neutral.
+* **The Mandatory One-Page Model Report:** Open the file `report/model_report.md`. This contains our detailed task definition, data splits, metrics, and baseline comparisons.
+* **The Robustness & Degradation Results:** Open `report/robustness.json`. This shows how our model handles heavy compression, resizing, and screenshots.
+* **The Adversarial Defense Results:** Open `report/attacks.json`. This shows how our model handles FGSM and PGD white-box attacks.
+* **The Full Metrics & Confusion Matrix:** Open `report/metrics.json`. This contains all of our exact metrics (AUC, Macro-F1, Thresholds) generated directly from the held-out test split.
+* **Explanation Samples:** Open the `report/explanation_samples/` folder to see exactly how our Grad-CAM heat-maps and text explanations look on real vs AI images.
+* **Model Weights & Checkpoints:** These are safely stored inside the `weights/` folder.
+* **The Source Code for the UI & Backend:** All code for the web interface is inside the `app/` folder.
+* **The Source Code for the Machine Learning Model:** All code for training, calibration, and prediction is inside the `model/` folder.
 
-## 7. Known limitations (honest)
+---
 
-* Trained on a handful of 2021–2023 generator families at modest scale; newer models (Flux, Imagen 3, GPT-image,
-  Midjourney v6+) are untested and may evade detection. Report `unseen` AUC is the number to trust, not `seen`.
-* Heavy re-compression, tiny crops and screenshots reduce reliability (quantified in the robustness table).
-* White-box adversarial perturbations of a few grey levels can flip verdicts; JPEG pre-filtering only partially helps.
-* Metadata can be forged or stripped; C2PA signatures are detected but not cryptographically verified.
-* Face-swap deepfakes of real people are out of scope by design; the tool makes no claims about individuals or events.
+## 7. Demo Video
 
-## 8. Repository layout
-
-```
-model/        ML package: data/ (download, prepare, datasets), nets.py, train.py, calibrate.py, evaluate.py,
-              predict.py (predict interface), explain.py, cues.py, provenance.py, robustness.py, attacks.py, multimodal.py
-app/backend   FastAPI + SQLAlchemy/SQLite (analyses, batches, reviews, reports, stats)
-app/frontend  Vite + React + TypeScript UI
-report/       metrics.json, robustness.json, attacks.json, dataset_card.json, model_report.md, explanation_samples/
-weights/      checkpoint + calibration (via release or training)
-tests/        pytest suite (model, explanation, provenance, API)
-scripts/      setup/run scripts, weight download
-```
-
-API docs: `http://localhost:8000/docs`.
-
-## 9. Originality declaration
-
-All code in this repository was written for this hackathon during the event window. Third-party components used
-(all cited, none copied as notebooks): PyTorch, `timm` (EfficientNet-B0 ImageNet weights), OpenCLIP (ViT-B/32 OpenAI
-weights), FastAPI, SQLAlchemy, React/Vite, scikit-learn, Pillow, NumPy. The SRM high-pass kernels are the standard
-filters from Fridrich & Kodovský (2012) as popularised in image-forensics literature; Grad-CAM follows Selvaraju et
-al. (2017) and is implemented from scratch in `model/explain.py`. Datasets: CIFAKE, GenImage (Tiny-GenImage subset),
-Imagenette — see section 3. AI coding assistance was used during development.
-
-## 10. Demo video
-
-_Link to the 3–5 minute demo: TBD_
+[Click here to watch the full 3-minute Video Demonstration](https://youtube.com/) 
+*(Replace this link with your actual video link before submission!)*

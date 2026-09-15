@@ -1,0 +1,299 @@
+{
+  "verdict": "real",
+  "label": "Inconclusive",
+  "band": "uncertain",
+  "probability_ai": 0.024,
+  "probability_ai_uncalibrated": 0.0234,
+  "confidence": 0.976,
+  "threshold": 0.0515,
+  "temperature": 1.0075363573992504,
+  "logit": -3.7314,
+  "attribution": {
+    "generator": "SD14",
+    "family": "latent-diffusion",
+    "confidence": 0.9713740181224828,
+    "family_confidence": 0.9924136267969614,
+    "distribution": {
+      "SD14": 0.9714,
+      "SD15": 0.0106,
+      "Wukong": 0.0104,
+      "ADM": 0.0055,
+      "GLIDE": 0.0019,
+      "BigGAN": 0.0002
+    },
+    "family_distribution": {
+      "latent-diffusion": 0.9924,
+      "pixel-diffusion": 0.0074,
+      "gan": 0.0002
+    },
+    "p_real_head": 0.9999980926513672,
+    "known_generators": [
+      "ADM",
+      "BigGAN",
+      "GLIDE",
+      "SD14",
+      "SD15",
+      "Wukong"
+    ],
+    "note": "Generators never seen in training (e.g. Midjourney, VQDM in our protocol) are mapped to the closest known family; treat as a hint."
+  },
+  "heatmap_png_base64": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADsklEQVR4nO2XyW4jRwyGf7KWbrUsL6dkJkAwWZB5/6fJMUAMb7Isa+u1FgZsWfZkgATI2I4v5kFVF/H/uFQVm+QjfoeaxYBjzDHDDaaYtxPcLj3WW4Nma6jZmqJZ86S556pe0nS3pGm9kqpp4aJFZoPMFokdZZ6iL46lLWfoJye5rb5P69PPbffjDxt8wj1+xgI/YUClsow3NguP9jEDDi0sWhh0nUHfMvqOMbTshpb80JMNPbkwkI0RJkVwziDR9dGjAIFMGsimQWLsyAb9b226Dg4NPGpMsIFB3Mue4uIBoMcUC1SYz0ssrgrcLU252XHR7bhod1R0Oyq7LRXdBmW3lbKvUYRBTDIQYmRiEtJyRDE5EmcFbuGHZDg5nyxPa/rESNZjh4jJAeB8BDAY4gR3VwVurzzdXbqT5Yqnu5p8X8P3Oyr7Bm5oxYcGPujaiosJnAlCBAGLsCGhHjZ1cGGHYAuKnfqIzoxAa7uuP3gsyww/AgxH+wx0BsPcY3np/d2VPVle8/Hqnqq6hQ+1+KERr+JxgE1BOA1ic4DJWUjVR4A9BMhQIiv7xnSUeEOTriUXtrZob83R5sLVCy/RjgB/VLjUTc8IN7a6H8XpeHVNJ5uVTFoV1Ug14l5sjhonSEQIGdD9WHcVPxgDRDQCEQEoKPCWy2FJ0+aU282Mu9IhmRHgT1/NRwCyYWFm6zkdbeY0297JtNE6q3gvLveiTWVFnnT+zeSBZ/wNpM3KuqaWfNSMGKTxBNpze7bQTYSJ91Q1er7XUnW1FIOKa6qjcE6iUX/bUVNx9dHDJQKCZlCbdgS44LPlSAmTdih6jXotZVePKXd7cbCok281LYb60BIKKGrvmAPAuZzdP1CK3mqtuNBkHxvxMYoRrbOKj7V+hkUZe2fsIRabGLIHuM7HuwNlEJMH2DzouqfVLnu2qY+EMekCMX/zaDvxSTcaaRKWCCOa9pcS/xrka7NB9tfooU4K8dx0/xezmvInQoUgeY3o/xEgfFGTQ+T/l/gIkPfN+GbGb6qOdwC8lwDvTchvfQztsenG2UxNH6EMQhaWxyv5lW9H+6uZn345D3TiYiMudNmlACMHmEz8KhD2N9x8pxv90FjTpF1j0q4w6VZc9SRIEZJJ5zkdyV7hlbSf483Hw1B6a2abG5qtdZp9GrmNvpKZkSXDvDzAL8P6g24aRl9IdGIhPbm4Rdn3ZKPOteOcACYd/l+6DLZK+08kHeNLE7xCOEpGPyoYwqTlf8X3+c2P4V/pBnpumKttkgAAAABJRU5ErkJggg==",
+  "regions": {
+    "cells": [
+      {
+        "region": "upper-left",
+        "row": 0,
+        "col": 0,
+        "share": 0.44500282406806946,
+        "peak": 0.9997283816337585
+      },
+      {
+        "region": "upper-right",
+        "row": 0,
+        "col": 2,
+        "share": 0.30994316935539246,
+        "peak": 0.9999997615814209
+      },
+      {
+        "region": "lower-left",
+        "row": 2,
+        "col": 0,
+        "share": 0.12591329216957092,
+        "peak": 0.5663804411888123
+      },
+      {
+        "region": "upper-centre",
+        "row": 0,
+        "col": 1,
+        "share": 0.10585809499025345,
+        "peak": 0.44756239652633667
+      },
+      {
+        "region": "middle-left",
+        "row": 1,
+        "col": 0,
+        "share": 0.012266768142580986,
+        "peak": 0.15406757593154907
+      },
+      {
+        "region": "middle-right",
+        "row": 1,
+        "col": 2,
+        "share": 0.0006453488604165614,
+        "peak": 0.033833909779787064
+      },
+      {
+        "region": "lower-centre",
+        "row": 2,
+        "col": 1,
+        "share": 0.00036290663410909474,
+        "peak": 0.019026217982172966
+      },
+      {
+        "region": "centre",
+        "row": 1,
+        "col": 1,
+        "share": 7.64431206334848e-06,
+        "peak": 0.003918647300451994
+      },
+      {
+        "region": "lower-right",
+        "row": 2,
+        "col": 2,
+        "share": 0.0,
+        "peak": 0.0
+      }
+    ],
+    "top_regions": [
+      "upper-left",
+      "upper-right"
+    ],
+    "top2_share": 0.7549459934234619,
+    "concentration": "concentrated",
+    "hot_bbox": [
+      0.0,
+      0.0,
+      1.0,
+      0.1875
+    ],
+    "hot_area_fraction": 0.053591358418367346
+  },
+  "cues": [
+    {
+      "id": "hf_energy",
+      "name": "High-frequency detail",
+      "value": 0.0216,
+      "typical_range": [
+        0.0038,
+        0.0303
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "spectral_slope",
+      "name": "Spectral slope",
+      "value": -2.3999,
+      "typical_range": [
+        -3.0892,
+        -1.9973
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "noise_level",
+      "name": "Sensor-noise level",
+      "value": 7.1094,
+      "typical_range": [
+        0.8312,
+        8.4742
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "residual_uniformity",
+      "name": "Noise consistency across regions",
+      "value": 1.152,
+      "typical_range": [
+        0.8444,
+        1.825
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "residual_periodicity",
+      "name": "Repeating micro-pattern",
+      "value": 0.3135,
+      "typical_range": [
+        0.1002,
+        0.4381
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "channel_correlation",
+      "name": "Colour-channel noise coupling",
+      "value": 0.9932,
+      "typical_range": [
+        0.897,
+        1.0
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "saturation_extreme",
+      "name": "Colour saturation",
+      "value": 0.0488,
+      "typical_range": [
+        0.0,
+        0.2504
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "laplacian_var",
+      "name": "Edge sharpness",
+      "value": 6891.5273,
+      "typical_range": [
+        1051.8615,
+        7521.5875
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    },
+    {
+      "id": "blockiness",
+      "name": "JPEG block grid",
+      "value": 1.0231,
+      "typical_range": [
+        0.8395,
+        1.7733
+      ],
+      "fired": false,
+      "side": null,
+      "strength": 0.0,
+      "finding": "within the range seen on real photographs"
+    }
+  ],
+  "provenance": {
+    "signal": "stripped",
+    "reasons": [
+      "no EXIF/XMP/text metadata found (typical after social-media re-upload)"
+    ],
+    "camera": {},
+    "software": null,
+    "editor_hits": [],
+    "ai_markers": [],
+    "c2pa": {
+      "present": false,
+      "claim_generator": null,
+      "note": null
+    },
+    "gps_present": false,
+    "jpeg_quality_estimate": 96,
+    "format": "JPEG",
+    "mode": "RGB",
+    "exif_field_count": 0,
+    "text_chunks": {}
+  },
+  "combined": {
+    "combined_probability": 0.024045415842796833,
+    "rule": "visual verdict only (metadata neutral or absent)",
+    "conflict": false
+  },
+  "caption_consistency": null,
+  "explanation": {
+    "band": "uncertain",
+    "label": "Inconclusive",
+    "summary": "The detector cannot separate this image from real photographs with confidence (2% likelihood of AI generation, close to the decision threshold).",
+    "sentences": [
+      "The detector cannot separate this image from real photographs with confidence (2% likelihood of AI generation, close to the decision threshold).",
+      "The evidence the model relied on is concentrated in the upper-left and upper-right of the frame (about 75% of the heat-map mass); inspect that area first.",
+      "All measured pixel statistics (noise, spectrum, colour, sharpness) are within the range of real photographs.",
+      "No camera or software metadata is present - common after social-media re-uploads, so it neither supports nor weakens the verdict."
+    ],
+    "fired_cues": []
+  },
+  "image": {
+    "width": 32,
+    "height": 32
+  },
+  "timing_ms": {
+    "model": 129.6,
+    "total": 395.0
+  },
+  "model": {
+    "backbone": "efficientnet_b0",
+    "epoch": 8,
+    "val_auc": 0.995369,
+    "held_out_generators": [
+      "Midjourney",
+      "VQDM"
+    ],
+    "calibrated": true,
+    "tta": true,
+    "device": "cpu"
+  }
+}

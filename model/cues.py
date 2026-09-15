@@ -210,7 +210,7 @@ def fit_reference(max_images: int = 1500, seed: int = C.SEED) -> dict:
     hi = hi[:max_images]
     vals: dict[str, list[float]] = {k: [] for k in CUE_META}
     for i, r in enumerate(hi):
-        c = compute_cues(Image.open(C.PROCESSED_DIR / r["path"]))
+        c = compute_cues(Image.open(r["path"]))
         for k, v in c.items():
             if np.isfinite(v):
                 vals[k].append(v)

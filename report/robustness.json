@@ -1,0 +1,153 @@
+{
+  "n_real": 50,
+  "n_seen_fake": 0,
+  "n_unseen_fake": 50,
+  "threshold": 0.0515,
+  "temperature": 1.0075363573992504,
+  "results": {
+    "original": {
+      "label": "Original",
+      "auc_all": 0.8316000000000001,
+      "auc_seen": null,
+      "auc_unseen": 0.8316000000000001,
+      "accuracy": 0.74,
+      "fpr": 0.44,
+      "tpr_seen": null,
+      "tpr_unseen": 0.92,
+      "verdict_flip_rate": 0.0,
+      "mean_abs_prob_shift": 0.0
+    },
+    "jpeg_q90": {
+      "label": "JPEG q90",
+      "auc_all": 0.8428,
+      "auc_seen": null,
+      "auc_unseen": 0.8428,
+      "accuracy": 0.72,
+      "fpr": 0.46,
+      "tpr_seen": null,
+      "tpr_unseen": 0.9,
+      "verdict_flip_rate": 0.06,
+      "mean_abs_prob_shift": 0.054316259920597076
+    },
+    "jpeg_q75": {
+      "label": "JPEG q75",
+      "auc_all": 0.8136,
+      "auc_seen": null,
+      "auc_unseen": 0.8136,
+      "accuracy": 0.66,
+      "fpr": 0.54,
+      "tpr_seen": null,
+      "tpr_unseen": 0.86,
+      "verdict_flip_rate": 0.16,
+      "mean_abs_prob_shift": 0.086133673787117
+    },
+    "jpeg_q50": {
+      "label": "JPEG q50",
+      "auc_all": 0.6624,
+      "auc_seen": null,
+      "auc_unseen": 0.6624,
+      "accuracy": 0.61,
+      "fpr": 0.54,
+      "tpr_seen": null,
+      "tpr_unseen": 0.76,
+      "verdict_flip_rate": 0.25,
+      "mean_abs_prob_shift": 0.11202096939086914
+    },
+    "jpeg_q30": {
+      "label": "JPEG q30",
+      "auc_all": 0.634,
+      "auc_seen": null,
+      "auc_unseen": 0.634,
+      "accuracy": 0.6,
+      "fpr": 0.36,
+      "tpr_seen": null,
+      "tpr_unseen": 0.56,
+      "verdict_flip_rate": 0.34,
+      "mean_abs_prob_shift": 0.14436346292495728
+    },
+    "resize_0.5x": {
+      "label": "Downscale 0.5x",
+      "auc_all": 0.8168,
+      "auc_seen": null,
+      "auc_unseen": 0.8168,
+      "accuracy": 0.74,
+      "fpr": 0.48,
+      "tpr_seen": null,
+      "tpr_unseen": 0.96,
+      "verdict_flip_rate": 0.1,
+      "mean_abs_prob_shift": 0.10321967303752899
+    },
+    "resize_0.25x": {
+      "label": "Downscale 0.25x",
+      "auc_all": 0.7827999999999999,
+      "auc_seen": null,
+      "auc_unseen": 0.7827999999999999,
+      "accuracy": 0.61,
+      "fpr": 0.76,
+      "tpr_seen": null,
+      "tpr_unseen": 0.98,
+      "verdict_flip_rate": 0.23,
+      "mean_abs_prob_shift": 0.30235570669174194
+    },
+    "blur_s1": {
+      "label": "Blur s=1",
+      "auc_all": 0.8108,
+      "auc_seen": null,
+      "auc_unseen": 0.8108,
+      "accuracy": 0.76,
+      "fpr": 0.44,
+      "tpr_seen": null,
+      "tpr_unseen": 0.96,
+      "verdict_flip_rate": 0.1,
+      "mean_abs_prob_shift": 0.10652648657560349
+    },
+    "blur_s2": {
+      "label": "Blur s=2",
+      "auc_all": 0.768,
+      "auc_seen": null,
+      "auc_unseen": 0.768,
+      "accuracy": 0.61,
+      "fpr": 0.76,
+      "tpr_seen": null,
+      "tpr_unseen": 0.98,
+      "verdict_flip_rate": 0.25,
+      "mean_abs_prob_shift": 0.2991754412651062
+    },
+    "noise_5": {
+      "label": "Noise s=5",
+      "auc_all": 0.8264,
+      "auc_seen": null,
+      "auc_unseen": 0.8264,
+      "accuracy": 0.76,
+      "fpr": 0.28,
+      "tpr_seen": null,
+      "tpr_unseen": 0.8,
+      "verdict_flip_rate": 0.18,
+      "mean_abs_prob_shift": 0.08939632773399353
+    },
+    "screenshot": {
+      "label": "Screenshot",
+      "auc_all": 0.7396,
+      "auc_seen": null,
+      "auc_unseen": 0.7396,
+      "accuracy": 0.64,
+      "fpr": 0.64,
+      "tpr_seen": null,
+      "tpr_unseen": 0.92,
+      "verdict_flip_rate": 0.16,
+      "mean_abs_prob_shift": 0.08828462660312653
+    },
+    "screenshot_jpeg50": {
+      "label": "Screenshot + JPEG q50",
+      "auc_all": 0.6356,
+      "auc_seen": null,
+      "auc_unseen": 0.6356,
+      "accuracy": 0.58,
+      "fpr": 0.54,
+      "tpr_seen": null,
+      "tpr_unseen": 0.7,
+      "verdict_flip_rate": 0.28,
+      "mean_abs_prob_shift": 0.12465653568506241
+    }
+  }
+}

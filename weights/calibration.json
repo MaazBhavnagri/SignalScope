@@ -1,0 +1,20 @@
+{
+  "temperature": 1.0075363573992504,
+  "threshold": 0.0515,
+  "threshold_alt": 0.5,
+  "target_fpr": 0.05,
+  "val_fpr_at_threshold": 0.05,
+  "val_tpr_at_threshold": 0.98725,
+  "val_fpr_at_0.5": 0.0045,
+  "val_tpr_at_0.5": 0.87,
+  "ece_before": 0.10994970693190893,
+  "ece_after": 0.11016138720108817,
+  "n_val": 6000,
+  "n_val_real": 2000,
+  "fitted": true,
+  "checkpoint_epoch": 8,
+  "sources": [
+    "cifake",
+    "tiny_genimage"
+  ]
+}

@@ -7,20 +7,20 @@ function RocChart({ groups }: { groups: Any }) {
   const W = 320, H = 280, P = 34
   const x = (v: number) => P + v * (W - P - 10), y = (v: number) => H - P - v * (H - P - 10)
   const series: { key: string; color: string; label: string }[] = [
-    { key: 'unseen', color: '#e35d3f', label: 'unseen generators' }, { key: 'seen', color: '#f2a93b', label: 'seen generators' }, { key: 'cifake', color: '#4fb286', label: 'CIFAKE test' },
+    { key: 'unseen', color: 'var(--ai-2)', label: 'unseen generators' }, { key: 'seen', color: 'var(--amber-2)', label: 'seen generators' }, { key: 'cifake', color: 'var(--real-2)', label: 'CIFAKE test' },
   ].filter(s => groups[s.key])
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: 420 }} role="img" aria-label="ROC curves">
-      <rect x={P} y={10} width={W - P - 10} height={H - P - 10} fill="none" stroke="#2c3238" />
-      <line x1={x(0)} y1={y(0)} x2={x(1)} y2={y(1)} stroke="#3a4148" strokeDasharray="4 4" />
+      <rect x={P} y={10} width={W - P - 10} height={H - P - 10} fill="rgba(255,255,255,0.01)" stroke="var(--line)" rx="4" />
+      <line x1={x(0)} y1={y(0)} x2={x(1)} y2={y(1)} stroke="var(--line-2)" strokeDasharray="4 4" />
       {series.map(s => {
         const r = groups[s.key].roc as { fpr: number[]; tpr: number[] }
         const d = r.fpr.map((f, i) => `${i ? 'L' : 'M'} ${x(f)} ${y(r.tpr[i])}`).join(' ')
-        return <path key={s.key} d={d} fill="none" stroke={s.color} strokeWidth={2} />
+        return <path key={s.key} d={d} fill="none" stroke={s.color} strokeWidth={2.2} style={{ filter: 'drop-shadow(0 0 6px currentColor)' }} />
       })}
-      {series.map((s, i) => <g key={s.key}><rect x={x(0.42)} y={y(0.28) + i * 16 - 8} width={10} height={3} fill={s.color} /><text x={x(0.42) + 15} y={y(0.28) + i * 16 - 4} fontSize={10} fill="#b9b3a5" fontFamily="IBM Plex Mono">{s.label} · AUC {groups[s.key].auc.toFixed(3)}</text></g>)}
-      <text x={x(0.5)} y={H - 8} fontSize={10} textAnchor="middle" fill="#7f7a6e" fontFamily="IBM Plex Mono">false-positive rate (real flagged as AI)</text>
-      <text x={10} y={y(0.5)} fontSize={10} textAnchor="middle" fill="#7f7a6e" fontFamily="IBM Plex Mono" transform={`rotate(-90 10 ${y(0.5)})`}>true-positive rate</text>
+      {series.map((s, i) => <g key={s.key}><rect x={x(0.42)} y={y(0.28) + i * 16 - 8} width={10} height={3} rx={1} fill={s.color} /><text x={x(0.42) + 15} y={y(0.28) + i * 16 - 4} fontSize={10} fill="var(--ink-2)" fontFamily="var(--mono)">{s.label} · AUC {groups[s.key]?.auc?.toFixed(3) ?? '-'}</text></g>)}
+      <text x={x(0.5)} y={H - 8} fontSize={10} textAnchor="middle" fill="var(--ink-3)" fontFamily="var(--mono)">false-positive rate (real flagged as AI)</text>
+      <text x={10} y={y(0.5)} fontSize={10} textAnchor="middle" fill="var(--ink-3)" fontFamily="var(--mono)" transform={`rotate(-90 10 ${y(0.5)})`}>true-positive rate</text>
     </svg>
   )
 }
@@ -30,12 +30,24 @@ function ConfMatrix({ cm, title }: { cm: Any; title: string }) {
   const max = Math.max(cm.tn, cm.fp, cm.fn, cm.tp, 1)
   return (
     <div>
-      <div className="eyebrow" style={{ marginBottom: 6 }}>{title}</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr', gap: 4, fontSize: 12 }}>
+      <div className="eyebrow" style={{ marginBottom: 8 }}>{title}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr', gap: 6, fontSize: 12 }}>
         <div /><div className="mono small muted" style={{ textAlign: 'center' }}>pred real</div><div className="mono small muted" style={{ textAlign: 'center' }}>pred AI</div>
         {cells.map((row, i) => (<Fragment key={i}>
           <div className="mono small muted" style={{ alignSelf: 'center' }}>{i ? 'true AI' : 'true real'}</div>
-          {row.map((v, j) => <div key={j} className="mono" style={{ padding: '14px 8px', textAlign: 'center', borderRadius: 4, background: i === j ? `rgba(79,178,134,${0.15 + 0.6 * v / max})` : `rgba(227,93,63,${0.15 + 0.6 * v / max})` }}>{v.toLocaleString()}</div>)}
+          {row.map((v, j) => (
+            <div key={j} className="mono" style={{
+              padding: '14px 8px',
+              textAlign: 'center',
+              borderRadius: 6,
+              background: i === j ? `rgba(16, 185, 129, ${0.12 + 0.5 * v / max})` : `rgba(244, 63, 94, ${0.12 + 0.5 * v / max})`,
+              border: i === j ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(244, 63, 94, 0.3)',
+              color: '#fff',
+              fontWeight: 600,
+            }}>
+              {v.toLocaleString()}
+            </div>
+          ))}
         </Fragment>))}
       </div>
     </div>
@@ -75,8 +87,8 @@ export default function ModelCardView() {
           {['unseen', 'seen', 'overall', 'cifake'].filter(k => groups[k]).map(k => (
             <div className="stat" key={k} style={k === 'unseen' ? { borderColor: 'var(--amber)' } : undefined}>
               <div className="eyebrow">{k === 'unseen' ? 'AUC · unseen generators' : k === 'seen' ? 'AUC · seen generators' : k === 'overall' ? 'AUC · overall test' : 'AUC · CIFAKE test'}</div>
-              <div className="v" style={k === 'unseen' ? { color: 'var(--amber-2)' } : undefined}>{groups[k].auc.toFixed(4)}</div>
-              <div className="small muted mono">F1 {groups[k].macro_f1.toFixed(3)} · acc {(groups[k].accuracy * 100).toFixed(1)}% · FPR {(groups[k].fpr * 100).toFixed(1)}%</div>
+              <div className="v" style={k === 'unseen' ? { color: 'var(--amber-2)' } : undefined}>{groups[k].auc?.toFixed(4) ?? '-'}</div>
+              <div className="small muted mono">F1 {groups[k].macro_f1?.toFixed(3) ?? '-'} · acc {groups[k].accuracy != null ? (groups[k].accuracy * 100).toFixed(1) + '%' : '-'} · FPR {groups[k].fpr != null ? (groups[k].fpr * 100).toFixed(1) + '%' : '-'}</div>
             </div>
           ))}
           {m.attribution && <div className="stat"><div className="eyebrow">attribution acc (seen)</div><div className="v">{(m.attribution.accuracy * 100).toFixed(1)}<small>%</small></div><div className="small muted mono">macro-F1 {m.attribution.macro_f1.toFixed(3)} · family {(m.attribution.family_accuracy * 100).toFixed(0)}%</div></div>}
@@ -88,7 +100,7 @@ export default function ModelCardView() {
           <div className="panel"><div className="panel-h"><h3>Operating point <span className="eyebrow">threshold {m.threshold.toFixed(2)} · target FPR {(card.protocol.target_fpr * 100).toFixed(0)}%</span></h3></div>
             <div className="panel-b stack">
               <table className="table"><thead><tr><th>split</th><th className="num">n</th><th className="num">AUC</th><th className="num">macro-F1</th><th className="num">acc</th><th className="num">FPR</th><th className="num">TPR</th></tr></thead>
-                <tbody>{Object.entries(groups).map(([k, g]: [string, Any]) => <tr key={k} className={k === 'unseen' ? 'hl' : ''}><td>{k}</td><td className="num">{g.n}</td><td className="num">{g.auc.toFixed(4)}</td><td className="num">{g.macro_f1.toFixed(3)}</td><td className="num">{(g.accuracy * 100).toFixed(1)}%</td><td className="num">{(g.fpr * 100).toFixed(1)}%</td><td className="num">{(g.tpr * 100).toFixed(1)}%</td></tr>)}</tbody></table>
+                <tbody>{Object.entries(groups).map(([k, g]: [string, Any]) => <tr key={k} className={k === 'unseen' ? 'hl' : ''}><td>{k}</td><td className="num">{g.n}</td><td className="num">{g.auc?.toFixed(4) ?? '-'}</td><td className="num">{g.macro_f1?.toFixed(3) ?? '-'}</td><td className="num">{g.accuracy != null ? (g.accuracy * 100).toFixed(1) + '%' : '-'}</td><td className="num">{g.fpr != null ? (g.fpr * 100).toFixed(1) + '%' : '-'}</td><td className="num">{g.tpr != null ? (g.tpr * 100).toFixed(1) + '%' : '-'}</td></tr>)}</tbody></table>
               <div className="grid-2">{groups.unseen && <ConfMatrix cm={groups.unseen.confusion_matrix} title="confusion · unseen split" />}{groups.overall && <ConfMatrix cm={groups.overall.confusion_matrix} title="confusion · overall" />}</div>
             </div>
           </div>
@@ -104,7 +116,7 @@ export default function ModelCardView() {
           <div className="panel"><div className="panel-h"><h3>Robustness to degradation <span className="eyebrow">module c</span></h3></div>
             <div className="panel-b">{rob ? (
               <table className="table"><thead><tr><th>degradation</th><th className="num">AUC seen</th><th className="num">AUC unseen</th><th className="num">acc</th><th className="num">FPR</th><th className="num">flips</th></tr></thead>
-                <tbody>{Object.values(rob).map((r: Any) => <tr key={r.label}><td>{r.label}</td><td className="num">{r.auc_seen.toFixed(3)}</td><td className="num" style={{ color: r.auc_unseen < 0.8 ? 'var(--ai)' : undefined }}>{r.auc_unseen.toFixed(3)}</td><td className="num">{(r.accuracy * 100).toFixed(1)}%</td><td className="num">{(r.fpr * 100).toFixed(1)}%</td><td className="num">{(r.verdict_flip_rate * 100).toFixed(1)}%</td></tr>)}</tbody></table>
+                <tbody>{Object.values(rob).map((r: Any) => <tr key={r.label}><td>{r.label}</td><td className="num">{r.auc_seen?.toFixed(3) ?? '-'}</td><td className="num" style={{ color: r.auc_unseen < 0.8 ? 'var(--ai)' : undefined }}>{r.auc_unseen?.toFixed(3) ?? '-'}</td><td className="num">{r.accuracy != null ? (r.accuracy * 100).toFixed(1) + '%' : '-'}</td><td className="num">{r.fpr != null ? (r.fpr * 100).toFixed(1) + '%' : '-'}</td><td className="num">{r.verdict_flip_rate != null ? (r.verdict_flip_rate * 100).toFixed(1) + '%' : '-'}</td></tr>)}</tbody></table>
             ) : <div className="small muted">run <code>python -m model.robustness</code></div>}</div>
           </div>
         </div>

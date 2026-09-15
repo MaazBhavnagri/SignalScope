@@ -3,6 +3,7 @@ data/
 weights/*.pt
 weights/*.pth
 weights/*.onnx
+!weights/signalscope_best.pt
 !weights/README.md
 
 # python
